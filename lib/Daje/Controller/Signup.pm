@@ -34,22 +34,20 @@ use v5.40;
 use Mojo::JSON qw{ decode_json };
 use Data::Dumper;
 
-our $VERSION = "0.01";
+our $VERSION = "0.04";
 
 sub signup($self) {
 
-    my $data->{data} = decode_json ($self->req->body);
+    my $data->{context} = decode_json ($self->req->body);
 
     say Dumper($data);
     $self->workflow->context($data);
-    $self->workflow->workflow_name("new_customer");
+    $self->workflow->workflow_name("new_client");
 
-    $self->workflow->process(
-        'new_customer'
-    );
+    $self->workflow->process('new_client');
 
-    unless ($self-workflow->error->has_error() == 1) {
-        my $error = $self-workflow->error->error();
+    if ($self->workflow->error->has_error() == 1) {
+        my $error = $self->workflow->error->error();
         $self->render(
             json =>
             {
